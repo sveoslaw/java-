@@ -1,0 +1,195 @@
+package Geometry;
+
+/**
+ *
+ * @author grade
+ */
+public class Point {
+
+    int[] coordinatesXY;
+
+    public Point(int[] coordinatesXY) {
+        setCoordinatesXY(coordinatesXY);
+    }
+
+    public Point() {
+        this(new int[]{0, 0});
+    }
+
+    public Point(Point newPoint) {
+        this(newPoint.getCoordinatesXY());
+    }
+
+    public void setCoordinatesXY(int[] copyCoordinatesXY) {
+        coordinatesXY = new int[copyCoordinatesXY.length];
+        if (copyCoordinatesXY == null) {
+            coordinatesXY = new int[]{0, 0};
+            for (int i = 0; i < coordinatesXY.length; i++) {
+                coordinatesXY[i] = copyCoordinatesXY[i];
+            }
+        } else {
+            for (int i = 0; i < coordinatesXY.length; i++) {
+                coordinatesXY[i] = copyCoordinatesXY[i];
+            }
+        }
+    }
+
+    public int[] getCoordinatesXY() {
+        int[] copyCoordinatesXY = new int[coordinatesXY.length];
+        for (int i = 0; i < copyCoordinatesXY.length; i++) {
+            copyCoordinatesXY[i] = coordinatesXY[i];
+        }
+        return copyCoordinatesXY;
+    }
+
+    public String toString() {
+
+        return String.format("(%d, %d)", coordinatesXY[0], coordinatesXY[1]);
+    }
+}
+
+
+package Geometry;
+
+/**
+ *
+ * @author grade
+ */
+public class Triangle {
+
+    Point[] vetrixes;
+
+    public Triangle(Point[] vetrixes) {
+        setVetrixes(vetrixes);
+    }
+
+    public Triangle() {
+        this(new Point[]{new Point(), new Point(), new Point()});
+    }
+
+    public Triangle(Triangle copyTriangle) {
+        this(copyTriangle.vetrixes);
+    }
+
+    public void setVetrixes(Point[] copyVetrixes) {
+
+        vetrixes = new Point[copyVetrixes.length];
+        if (copyVetrixes == null) {
+            vetrixes = new Point[3];
+            for (int i = 0; i < vetrixes.length; i++) {
+                copyVetrixes[i] = new Point();
+                vetrixes[i] = new Point(copyVetrixes[i]);
+            }
+        } else {
+            for (int i = 0; i < vetrixes.length; i++) {
+                if (copyVetrixes[i] == null) {
+                    copyVetrixes[i] = new Point();
+                    vetrixes[i] = new Point(copyVetrixes[i]);
+                } else {
+                    vetrixes[i] = new Point(copyVetrixes[i]);
+                }
+            }
+        }
+    }
+
+    public Point[] getVetrixes() {
+        Point[] copyVetrixes = new Point[vetrixes.length];
+        for (int i = 0; i < vetrixes.length; i++) {
+            copyVetrixes[i] = new Point(vetrixes[i]);
+        }
+        return copyVetrixes;
+    }
+
+    @Override
+    public String toString() {
+
+        String result = "{";
+        for (int i = 0; i < vetrixes.length; i++) {
+            result += vetrixes[i];
+        }
+        result += "}";
+        return result;
+    }
+
+//    private double lengthBetweenTwoPoints(int x, int y){
+//        double result;
+//        result = Math.sqrt(Math.pow(, result))
+//    }    
+    public double perimeter() {
+
+        double A, B, C;
+        double AB, BC, CA;
+        double perimeter;
+        AB = Math.sqrt(Math.pow((vetrixes[0].getCoordinatesXY()[0] - vetrixes[1].getCoordinatesXY()[0]), 2)
+                + (Math.pow(vetrixes[0].getCoordinatesXY()[1] - vetrixes[1].getCoordinatesXY()[1], 2)));
+        BC = Math.sqrt(Math.pow((vetrixes[1].getCoordinatesXY()[0] - vetrixes[2].getCoordinatesXY()[0]), 2)
+                + (Math.pow(vetrixes[1].getCoordinatesXY()[1] - vetrixes[2].getCoordinatesXY()[1], 2)));
+        CA = Math.sqrt(Math.pow((vetrixes[2].getCoordinatesXY()[0] - vetrixes[0].getCoordinatesXY()[0]), 2)
+                + (Math.pow(vetrixes[2].getCoordinatesXY()[1] - vetrixes[0].getCoordinatesXY()[1], 2)));
+
+        perimeter = AB + BC + CA;
+
+        return perimeter;
+    }
+
+    public static Triangle[] sortTriangles(Triangle[] trArray) {
+
+        //Triangle[] sortedTrArray = new Triangle[trArray.length];
+        if (trArray != null) {
+            for (int pass = 1; pass < trArray.length; pass++) {
+                for (int index = 0; index < trArray.length - pass; index++) {
+
+                    if (trArray[index].perimeter() > trArray[index + 1].perimeter()) {
+                        Triangle temp = trArray[index];
+                        trArray[index] = trArray[index + 1];
+                        temp = trArray[index + 1];
+                    }
+                }
+            }
+            return trArray;
+        } else {
+            return null;
+        }
+    }
+}
+
+
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package TriangleTest;
+
+import Geometry.Point;
+import Geometry.Triangle;
+
+/**
+ *
+ * @author grade
+ */
+public class TriangleTest {
+
+    public static void main(String[] args) {
+
+        Point pnt1 = new Point(new int[]{4, 5});
+        Point pnt2 = new Point(new int[]{9, 23});
+        Point pnt3 = new Point(new int[]{8, 11});
+
+//        Point[] qpnt1 = new Point[]{new Point(new int[]{3, 5})};
+//        Point[] qpnt2 = new Point[]{new Point(new int[]{8, 1})};
+//        Point[] qpnt3 = new Point[]{new Point(new int[]{5, 1})};
+
+        Triangle triA = new Triangle(new Point[]{pnt1, pnt2, pnt3});
+        Triangle triB = new Triangle(triA);
+        Triangle triC = new Triangle();
+
+        Triangle[] trArr = {triC, triB, triA};
+
+        Triangle[] sorted = Triangle.sortTriangles(trArr);
+        for (int i = 0; i < trArr.length; i++) {
+            System.out.println("\nCoordinates of points: " + sorted[i]
+                    + " Perimeter of triangle: " + Double.toString(sorted[i].perimeter()));
+
+        }
+    }
+}
