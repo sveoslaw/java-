@@ -1,0 +1,97 @@
+
+package Cript;
+
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author Svetlio
+ */
+public class Cript {
+
+    public String encrypt(int shiftLength, String plainText) {
+
+        //make string to charArray
+        char[] planeTextToArrayOfChars = plainText.toCharArray();
+        //to get all element of charArray
+        for (int i = 0; i < planeTextToArrayOfChars.length;) {
+            planeTextToArrayOfChars[i] = (char) (planeTextToArrayOfChars[i]
+                    + shiftLength);
+
+            if (planeTextToArrayOfChars[i] > 'Z') {
+                planeTextToArrayOfChars[i] -= 'Z';
+                planeTextToArrayOfChars[i] += 'A';
+            }
+        }
+        //make criptCharArray to string
+        String out = new String(planeTextToArrayOfChars);
+        //show result
+        JOptionPane.showMessageDialog(null, out);
+        return out;
+    }
+
+    public String decrypt(int shiftLength, String cipherText) {
+
+        char[] ciperTextToArrayOfChars = cipherText.toCharArray();
+        for (int i = 0; i < ciperTextToArrayOfChars.length; i++) {
+            if (ciperTextToArrayOfChars[i] < 'A') {
+                ciperTextToArrayOfChars[i] += 'Z';
+                ciperTextToArrayOfChars[i] -= 'A';
+            }
+        }
+        String out = new String(ciperTextToArrayOfChars);
+        JOptionPane.showInternalMessageDialog(null, out);
+        return out;
+    }
+}
+
+
+
+package Cript;
+
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author Svetlio
+ */
+public class CriptTest {
+
+    public static void main(String[] args) {
+
+        Cript cript = new Cript();
+
+        int lenght;
+        int chose;
+        String lenghtOfCript;
+        String textForCript;
+
+        String choice = JOptionPane.showInputDialog(null, "Press 1 to encrypt\n"
+                + "Press 2 to decrypt\nPress 3 to exit", "Menu", JOptionPane.INFORMATION_MESSAGE);
+        chose = Integer.parseInt(choice);
+
+        switch (chose) {
+            case 1:
+                lenghtOfCript = JOptionPane.showInputDialog(null, "Insert shift "
+                        + "length for the cipher between 1 and 25 :");
+                lenght = Integer.parseInt(lenghtOfCript);
+                textForCript = JOptionPane.showInputDialog(null, "Insert your plain text"
+                        + "(CAPITAL letters only: ");
+                cript.encrypt(lenght, textForCript);
+                break;
+
+            case 2:
+
+                lenghtOfCript = JOptionPane.showInputDialog(null, "Inset shift"
+                        + "lenght for decript between 1 and 25 :");
+                lenght = Integer.parseInt(lenghtOfCript);
+                String textForDecript = JOptionPane.showInputDialog(null,
+                        "Insert text for decryption: ");
+                cript.decrypt(lenght, textForDecript);
+                break;
+
+            case 3:
+                System.exit(0);
+        }
+    }
+}
